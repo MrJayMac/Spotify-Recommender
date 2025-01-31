@@ -1,25 +1,33 @@
 const express = require('express')
 const cors = require('cors')
+const pool = require('./db')
 const dotenv = require('dotenv');
-const { Pool } = require('pg');
+dotenv.config()
 
-const pool = new Pool({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-});
-
-
-dotenv.config();
 const app = express()
 const port = process.env.PORT || 3000;
-
 app.use(cors())
+
 
 app.get('/', function(req,res) {
     res.send('Hello World')
 })
 
 app.listen(port)
+
+
+
+
+
+{/* CHECK TO SEE DATABASE CONNECTION
+
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_PASSWORD:", process.env.DB_PASSWORD ? "Loaded" : "Not Loaded");
+
+pool.connect()
+  .then(client => {
+    console.log("✅ Successfully connected to the database!");
+    client.release(); // Release the connection back to the pool
+  })
+  .catch(err => console.error("❌ Database connection error:", err));
+*/}
