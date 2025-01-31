@@ -1,12 +1,37 @@
 const express = require('express')
 const cors = require('cors')
 const pool = require('./db')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv');
 dotenv.config()
 
 const app = express()
 const port = process.env.PORT || 3000;
 app.use(cors())
+
+app.post('/register', async (req, res) => {
+    const {username, password} = req.body
+
+    const userCheck = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    if (userCheck.rows.length > 0) {
+        return res.status(400).json({ error: 'Username already in use' });
+    }
+
+    const salt = bcrypt.genSaltSync(10)
+    const hashed_password = bcrypt.hashSync(password,salt)
+
+    try{
+        const register = await pool.query(`INSERT INTO users (username, password) VALUES($1, $2)`, [username, hashed_password])
+        const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: '1hr' });
+        res.status(201).json({ message: 'User successfully registered', username, token } );
+    }  
+    catch (err) {
+        console.error('Error during registration', err);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+    
+})
 
 
 app.get('/', function(req,res) {
