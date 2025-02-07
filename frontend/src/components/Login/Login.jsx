@@ -30,13 +30,13 @@ const Login = () => {
       }
 
       try {
-        const response = await axios.post('http://localhost:5000/register', {
-          email,
+        const response = await axios.post('http://localhost:8000/register', {
           username,
-          password
+          password,
+          email
         });
 
-        if (response.status === 200) {
+        if (response.status === 201) {
           console.log('Registration successful:', response.data);
           setSignUp(false);
         } else {
@@ -52,7 +52,7 @@ const Login = () => {
 
 
       try {
-        const response = await axios.post('http://localhost:5000/login', {
+        const response = await axios.post('http://localhost:8000/login', {
           username,
           password
         });
