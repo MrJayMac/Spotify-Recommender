@@ -18,7 +18,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError('');
 
     if (signUp) {
@@ -50,7 +49,6 @@ const Login = () => {
         return setError('Username and password are required.');
       }
 
-
       try {
         const response = await axios.post('http://localhost:8000/login', {
           username,
@@ -59,7 +57,7 @@ const Login = () => {
 
         if (response.status === 200) {
           console.log('Login successful:', response.data.token);
-          localStorage.setItem('token', response.data.token); 
+          localStorage.setItem('token', response.data.token);
           navigate('/home');
         } else {
           setError(response.data.error || 'Invalid credentials');
@@ -68,6 +66,11 @@ const Login = () => {
         setError(error.response?.data?.error || error.message);
       }
     }
+  };
+
+  // 🔹 Function to handle Spotify OAuth login
+  const handleSpotifyLogin = () => {
+    window.location.href = 'http://localhost:8000/spotify/login';
   };
 
   return (
@@ -110,6 +113,11 @@ const Login = () => {
 
       <button onClick={() => viewLogin(true)}>Create an account</button>
       <button onClick={() => viewLogin(false)}>Already have an account?</button>
+
+      {/* 🔹 Spotify Login Button */}
+      <button onClick={handleSpotifyLogin} style={{ marginTop: '10px', backgroundColor: 'green', color: 'white' }}>
+        Login with Spotify
+      </button>
 
       {error && <p>{error}</p>}
     </div>

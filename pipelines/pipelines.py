@@ -61,6 +61,8 @@ model_path = "als_model"
 als_model.write().overwrite().save(model_path)
 print("Model Saved Successfully!")
 
+############################################## FORGET THE USER DATA JUST GET IT DONE FIRST!!!!
+
 
 ##############################################
 #BUILDING MODEL#
